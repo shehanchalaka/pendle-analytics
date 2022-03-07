@@ -1,0 +1,8 @@
+{
+  "network": "avalanche",
+  "pendleRouter": "0x771ad65bF2837C89A1CC0A0FC601d9De7f217b52",
+  "pendleRouterStartBlock": "6725078",
+  "pendleData": "0x94D7E5c48Ca9627001FACb04D1820C54dFf3032c",
+  "pendleDataStartBlock": "6725074",
+  "traderJoeFactory": "0x9Ad6C38BE94206cA50bb0d90783181662f0Cfa10"
+}

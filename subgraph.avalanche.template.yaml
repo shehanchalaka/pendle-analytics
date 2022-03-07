@@ -5,11 +5,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: PendleRouter
-    network: mainnet
+    network: {{network}}
     source:
-      address: "0x1b6d3E5Da9004668E14Ca39d1553E9a46Fe842B3"
+      address: "{{pendleRouter}}"
       abi: PendleRouter
-      startBlock: 12638048
+      startBlock: {{pendleRouterStartBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -21,14 +21,8 @@ dataSources:
       abis:
         - name: PendleRouter
           file: ./abis/PendleRouter.json
-        - name: PendleMarket
-          file: ./abis/PendleMarket.json
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: SushiswapFactory
-          file: ./abis/sushiswap/factory.json
-        - name: SushiswapPair
-          file: ./abis/sushiswap/pair.json
       eventHandlers:
         - event: MarketCreated(bytes32,indexed address,indexed address,indexed address)
           handler: handleMarketCreated
@@ -41,11 +35,11 @@ dataSources:
       file: ./src/mappings/router.ts
   - kind: ethereum/contract
     name: PendleData
-    network: mainnet
+    network: {{network}}
     source:
-      address: "0xE8A6916576832AA5504092C1cCCC46E3bB9491d6"
+      address: "{{pendleData}}"
       abi: PendleData
-      startBlock: 12638042
+      startBlock: {{pendleDataStartBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -57,19 +51,17 @@ dataSources:
       abis: 
         - name: PendleData
           file: ./abis/PendleData.json
-        - name: PendleMarket
-          file: ./abis/PendleMarket.json
       eventHandlers:
         - event: ForgeAdded(indexed bytes32,indexed address)
           handler: handleForgeAdded
       file: ./src/mappings/data.ts
   - kind: ethereum/contract
-    name: SushiswapFactory
-    network: mainnet
+    name: TraderJoeFactory
+    network: {{network}}
     source:
-      address: "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac"
-      abi: SushiswapFactory
-      startBlock: 12638042
+      address: "{{traderJoeFactory}}"
+      abi: TraderJoeFactory
+      startBlock: {{pendleDataStartBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -78,21 +70,19 @@ dataSources:
         - Token
         - OTMarket
       abis:
-        - name: SushiswapFactory
-          file: ./abis/sushiswap/factory.json
-        - name: SushiswapPair
-          file: ./abis/sushiswap/pair.json
+        - name: TraderJoeFactory
+          file: ./abis/traderJoe/factory.json
         - name: ERC20
           file: ./abis/ERC20.json
       eventHandlers:
         - event: PairCreated(indexed address,indexed address,address,uint256)
-          handler: handleSushiswapPairCreated
-      file: ./src/mappings/sushiswap.ts
+          handler: handleTraderJoePairCreated
+      file: ./src/mappings/traderJoe.ts
 
 templates:
   - kind: ethereum/contract
     name: IPendleForge
-    network: mainnet
+    network: {{network}}
     source:
       abi: IPendleForge
     mapping:
@@ -105,14 +95,10 @@ templates:
       abis:
         - name: IPendleForge
           file: ./abis/IPendleForge.json
-        - name: PendleMarket
-          file: ./abis/PendleMarket.json
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: SushiswapFactory
-          file: ./abis/sushiswap/factory.json
-        - name: SushiswapPair
-          file: ./abis/sushiswap/pair.json
+        - name: TraderJoePair
+          file: ./abis/traderJoe/pair.json
       eventHandlers:
         - event: NewYieldContracts(bytes32,indexed address,indexed uint256,address,address,address)
           handler: handleNewYieldContracts
@@ -121,30 +107,3 @@ templates:
         - event: RedeemYieldToken(bytes32,indexed address,indexed uint256,uint256,uint256,indexed address)
           handler: handleRedeemYieldToken
       file: ./src/mappings/forge.ts
-  - kind: ethereum/contract
-    name: SushiswapPair
-    network: mainnet
-    source:
-      abi: SushiswapPair
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.6
-      language: wasm/assemblyscript
-      entities:
-        - Token
-        - TokenPrice
-      abis:
-        - name: ERC20
-          file: ./abis/ERC20.json
-        - name: SushiswapFactory
-          file: ./abis/sushiswap/factory.json
-        - name: SushiswapPair
-          file: ./abis/sushiswap/pair.json
-      eventHandlers:
-        - event: Mint(indexed address,uint256,uint256)
-          handler: handleSushiswapMint
-        - event: Burn(indexed address,uint256,uint256,indexed address)
-          handler: handleSushiswapBurn
-        - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
-          handler: handleSushiswapSwap
-      file: ./src/mappings/sushiswap.ts

@@ -1,6 +1,96 @@
-type ExampleEntity @entity {
+type Token @entity {
   id: ID!
-  count: BigInt!
-  amount: BigInt! # uint256
-  sendTo: Bytes! # address
+  symbol: String!
+  name: String!
+  decimals: BigInt!
+  totalSupply: BigDecimal!
+
+  expiry: BigInt!
+  forgeId: String!
+  underlyingToken: Token
+
+  type: String!
+  market: Market
+}
+
+type Forge @entity {
+  # forge address
+  id: ID!
+  # human readable ID
+  forgeId: String!
+}
+
+type YieldContract @entity {
+  id: ID!
+  forgeId: String!
+  expiry: BigInt!
+
+  underlyingToken: Token!
+  yieldBearingToken: Token!
+  ot: Token!
+  yt: Token!
+
+  tokenizedVolume: BigDecimal!
+  tokenizedVolumeUSD: BigDecimal!
+  tokenizeCount: BigInt!
+
+  redeemedVolume: BigDecimal!
+  redeemedVolumeUSD: BigDecimal!
+  redeemCount: BigInt!
+
+  lockedVolume: BigDecimal!
+  lockedVolumeUSD: BigDecimal!
+}
+
+type Market @entity {
+  id: ID!
+  type: String!
+  token0: Token!
+  token1: Token!
+  baseToken: Token!
+  quoteToken: Token!
+  expiry: BigInt!
+  name: String!
+  swapCount: BigInt!
+  createdTimestamp: BigInt!
+  createdBlock: BigInt!
+}
+
+type Transaction @entity {
+  id: ID!
+  hash: String!
+  timestamp: BigInt!
+  block: BigInt!
+  market: Market
+  yieldContract: YieldContract
+  user: User!
+  action: String!
+  inputs: [TokenAmount!]!
+  outputs: [TokenAmount!]!
+  amountUSD: BigDecimal!
+}
+
+type TokenAmount @entity {
+  id: ID!
+  token: Token!
+  amount: BigDecimal!
+  amountUSD: BigDecimal!
+}
+
+type User @entity {
+  id: ID!
+
+  transactions: [Transaction!]! @derivedFrom(field: "user")
+}
+
+type TokenPrice @entity {
+  id: ID!
+  token: Token!
+  timestamp: BigInt!
+  price: BigDecimal!
+}
+
+type DebugLog @entity {
+  id: ID!
+  message: String!
 }
