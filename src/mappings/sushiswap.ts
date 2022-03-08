@@ -3,6 +3,7 @@ import {
   Swap as SwapEvent,
   Mint as MintEvent,
   Burn as BurnEvent,
+  Sync as SyncEvent,
 } from "../../generated/templates/SushiswapPair/SushiswapPair";
 import { SushiswapPair as SushiswapPairTemplate } from "../../generated/templates";
 import { Market, Token, Transaction } from "../../generated/schema";
@@ -87,12 +88,41 @@ export function handleSushiswapMint(event: MintEvent): void {
   let market = Market.load(context.getString("market"))!;
   transaction.market = market.id;
 
-  // TODO
+  // NOTE no way to find the out LP token amount
+  let token0 = loadToken(market.token0);
+  let token1 = loadToken(market.token1);
+  let lpToken = loadToken(market.id);
+
+  let token0Amount = rawToDecimal(event.params.amount0, token0.decimals);
+  let token1Amount = rawToDecimal(event.params.amount1, token1.decimals);
+
+  let inToken0Amount = getTokenAmount(hash, token0, token0Amount);
+  let inToken1Amount = getTokenAmount(hash, token1, token1Amount);
+
+  let inputs = transaction.inputs;
+  inputs.push(inToken0Amount.id);
+  inputs.push(inToken1Amount.id);
+  transaction.inputs = inputs;
+
+  transaction.amountUSD = inToken0Amount.amountUSD.plus(
+    inToken1Amount.amountUSD
+  );
+
+  // derive lp token amount from transaction amountUSD
+  let lpPrice = getTokenPrice(lpToken);
+  let outLPAmount = inToken0Amount.amountUSD
+    .plus(inToken1Amount.amountUSD)
+    .div(lpPrice);
+  let outLPTokenAmount = getTokenAmount(hash, lpToken, outLPAmount);
+
+  let outputs = transaction.outputs;
+  outputs.push(outLPTokenAmount.id);
+  transaction.outputs = outputs;
 
   transaction.save();
 }
 
-export function handleSushiswapBurn(event: SwapEvent): void {
+export function handleSushiswapBurn(event: BurnEvent): void {
   let hash = event.transaction.hash.toHexString();
 
   let transaction = new Transaction(hash);
@@ -109,7 +139,36 @@ export function handleSushiswapBurn(event: SwapEvent): void {
   let market = Market.load(context.getString("market"))!;
   transaction.market = market.id;
 
-  // TODO
+  // NOTE no way to find the in LP token amount
+  let lpToken = loadToken(market.id);
+  let token0 = loadToken(market.token0);
+  let token1 = loadToken(market.token1);
+
+  let token0Amount = rawToDecimal(event.params.amount0, token0.decimals);
+  let token1Amount = rawToDecimal(event.params.amount1, token1.decimals);
+
+  let outToken0Amount = getTokenAmount(hash, token0, token0Amount);
+  let outToken1Amount = getTokenAmount(hash, token1, token1Amount);
+
+  let outputs = transaction.outputs;
+  outputs.push(outToken0Amount.id);
+  outputs.push(outToken1Amount.id);
+  transaction.outputs = outputs;
+
+  transaction.amountUSD = outToken0Amount.amountUSD.plus(
+    outToken1Amount.amountUSD
+  );
+
+  // derive lp token amount from transaction amountUSD
+  let lpPrice = getTokenPrice(lpToken);
+  let inLPAmount = outToken0Amount.amountUSD
+    .plus(outToken1Amount.amountUSD)
+    .div(lpPrice);
+  let inLPTokenAmount = getTokenAmount(hash, lpToken, inLPAmount);
+
+  let inputs = transaction.inputs;
+  inputs.push(inLPTokenAmount.id);
+  transaction.inputs = inputs;
 
   transaction.save();
 }

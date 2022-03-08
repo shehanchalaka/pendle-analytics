@@ -25,10 +25,18 @@ dataSources:
           file: ./abis/PendleMarket.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: ICToken
+          file: ./abis/ICToken.json
+        - name: IWXBTRFLY
+          file: ./abis/IWXBTRFLY.json
         - name: SushiswapFactory
           file: ./abis/sushiswap/factory.json
         - name: SushiswapPair
           file: ./abis/sushiswap/pair.json
+        - name: UniswapFactory
+          file: ./abis/uniswap/factory.json
+        - name: UniswapPool
+          file: ./abis/uniswap/pool.json
       eventHandlers:
         - event: MarketCreated(bytes32,indexed address,indexed address,indexed address)
           handler: handleMarketCreated
@@ -82,8 +90,16 @@ dataSources:
           file: ./abis/sushiswap/factory.json
         - name: SushiswapPair
           file: ./abis/sushiswap/pair.json
+        - name: UniswapFactory
+          file: ./abis/uniswap/factory.json
+        - name: UniswapPool
+          file: ./abis/uniswap/pool.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: ICToken
+          file: ./abis/ICToken.json
+        - name: IWXBTRFLY
+          file: ./abis/IWXBTRFLY.json
       eventHandlers:
         - event: PairCreated(indexed address,indexed address,address,uint256)
           handler: handleSushiswapPairCreated
@@ -109,10 +125,18 @@ templates:
           file: ./abis/PendleMarket.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: ICToken
+          file: ./abis/ICToken.json
+        - name: IWXBTRFLY
+          file: ./abis/IWXBTRFLY.json
         - name: SushiswapFactory
           file: ./abis/sushiswap/factory.json
         - name: SushiswapPair
           file: ./abis/sushiswap/pair.json
+        - name: UniswapFactory
+          file: ./abis/uniswap/factory.json
+        - name: UniswapPool
+          file: ./abis/uniswap/pool.json
       eventHandlers:
         - event: NewYieldContracts(bytes32,indexed address,indexed uint256,address,address,address)
           handler: handleNewYieldContracts
@@ -136,10 +160,18 @@ templates:
       abis:
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: ICToken
+          file: ./abis/ICToken.json
+        - name: IWXBTRFLY
+          file: ./abis/IWXBTRFLY.json
         - name: SushiswapFactory
           file: ./abis/sushiswap/factory.json
         - name: SushiswapPair
           file: ./abis/sushiswap/pair.json
+        - name: UniswapFactory
+          file: ./abis/uniswap/factory.json
+        - name: UniswapPool
+          file: ./abis/uniswap/pool.json
       eventHandlers:
         - event: Mint(indexed address,uint256,uint256)
           handler: handleSushiswapMint

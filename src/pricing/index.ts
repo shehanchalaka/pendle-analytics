@@ -9,11 +9,11 @@ export function getTokenPrice(token: Token): BigDecimal {
   } else if (token.type == "yt") {
     return getYTPrice(token);
   } else if (token.type == "lp-yt") {
-    return getGenericTokenPrice(token);
+    return getPendleLPTokenPrice(token);
   } else if (token.type == "lp-ot") {
-    return getGenericTokenPrice(token);
+    return getSushiLPTokenPrice(token);
   } else if (token.type == "yieldBearing") {
-    return getGenericTokenPrice(token);
+    return getYieldBearingTokenPrice(token);
   }
   return getGenericTokenPrice(token);
 }
@@ -45,20 +45,29 @@ function getYTPrice(token: Token): BigDecimal {
   return BigDecimal.fromString("0");
 }
 
-function getPendleLPPrice(token: Token): BigDecimal {
+function getPendleLPTokenPrice(token: Token): BigDecimal {
   if (dataSource.network() == "mainnet") {
     return ethereum.getPendleLPPrice(token);
   } else if (dataSource.network() == "avalanche") {
-    return avalanche.getPendleLPPrice(token);
+    return avalanche.getPendleLPTokenPrice(token);
   }
   return BigDecimal.fromString("0");
 }
 
-function getSushiswapLPPrice(token: Token): BigDecimal {
+function getSushiLPTokenPrice(token: Token): BigDecimal {
   if (dataSource.network() == "mainnet") {
-    return ethereum.getSushiswapLPPrice(token);
+    return ethereum.getSushiLPTokenPrice(token);
   } else if (dataSource.network() == "avalanche") {
-    return avalanche.getTraderJoeLPPrice(token);
+    return avalanche.getTraderJoeLPTokenPrice(token);
+  }
+  return BigDecimal.fromString("0");
+}
+
+function getYieldBearingTokenPrice(token: Token): BigDecimal {
+  if (dataSource.network() == "mainnet") {
+    return ethereum.getYieldBearingTokenPrice(token);
+  } else if (dataSource.network() == "avalanche") {
+    return avalanche.getYieldBearingTokenPrice(token);
   }
   return BigDecimal.fromString("0");
 }

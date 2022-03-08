@@ -92,5 +92,6 @@ type TokenPrice @entity {
 
 type DebugLog @entity {
   id: ID!
+  nextId: String!
   message: String!
 }

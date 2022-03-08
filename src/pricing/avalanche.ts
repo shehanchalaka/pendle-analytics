@@ -20,11 +20,15 @@ export function getYTPrice(token: Token): BigDecimal {
   return BigDecimal.fromString("1");
 }
 
-export function getPendleLPPrice(token: Token): BigDecimal {
+export function getPendleLPTokenPrice(token: Token): BigDecimal {
   return BigDecimal.fromString("0");
 }
 
-export function getTraderJoeLPPrice(token: Token): BigDecimal {
+export function getTraderJoeLPTokenPrice(token: Token): BigDecimal {
+  return BigDecimal.fromString("0");
+}
+
+export function getYieldBearingTokenPrice(token: Token): BigDecimal {
   return BigDecimal.fromString("0");
 }
 

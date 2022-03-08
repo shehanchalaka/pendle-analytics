@@ -119,16 +119,16 @@ export function handleExit(event: Exit): void {
   let token1Amount = rawToDecimal(event.params.token1Amount, token1.decimals);
 
   let inLPTokenAmount = getTokenAmount(hash, lpToken, inLPAmount);
-  let inToken0Amount = getTokenAmount(hash, token0, token0Amount);
-  let inToken1Amount = getTokenAmount(hash, token1, token1Amount);
+  let outToken0Amount = getTokenAmount(hash, token0, token0Amount);
+  let outToken1Amount = getTokenAmount(hash, token1, token1Amount);
 
   let inputs = transaction.inputs;
   inputs.push(inLPTokenAmount.id);
   transaction.inputs = inputs;
 
   let outputs = transaction.outputs;
-  outputs.push(inToken0Amount.id);
-  outputs.push(inToken1Amount.id);
+  outputs.push(outToken0Amount.id);
+  outputs.push(outToken1Amount.id);
   transaction.outputs = outputs;
 
   transaction.amountUSD = inLPTokenAmount.amountUSD;

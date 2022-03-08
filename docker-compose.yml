@@ -40,8 +40,3 @@ services:
       POSTGRES_DB: graph-node
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
-  ganache:
-    image: trufflesuite/ganache-cli
-    ports:
-      - "8545:8545"
-    command: -i 15 --gasLimit 8000000 --deterministic

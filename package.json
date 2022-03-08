@@ -1,13 +1,13 @@
 {
-  "name": "pendle-analytics-v2",
+  "name": "pendle-analytics",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ shehanchalaka/pendle-analytics-v2",
-    "create-local": "graph create --node http://127.0.0.1:8020/ shehanchalaka/pendle-analytics-v2",
-    "remove-local": "graph remove --node http://127.0.0.1:8020/ shehanchalaka/pendle-analytics-v2",
-    "deploy-local": "graph deploy --node http://127.0.0.1:8020/ --ipfs http://127.0.0.1:5001 shehanchalaka/pendle-analytics-v2",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ shehanchalaka/pendle-analytics",
+    "create-local": "graph create --node http://127.0.0.1:8020/ shehanchalaka/pendle-analytics",
+    "remove-local": "graph remove --node http://127.0.0.1:8020/ shehanchalaka/pendle-analytics",
+    "deploy-local": "graph deploy --node http://127.0.0.1:8020/ --ipfs http://127.0.0.1:5001 shehanchalaka/pendle-analytics",
     "graph-node": "./graph-node.sh",
     "prepare:mainnet": "mustache config/mainnet.json subgraph.ethereum.template.yaml > subgraph.yaml && yarn codegen",
     "prepare:avalanche": "mustache config/avalanche.json subgraph.avalanche.template.yaml > subgraph.yaml && yarn codegen"
