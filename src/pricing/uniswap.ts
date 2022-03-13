@@ -3,6 +3,7 @@ import { UniswapPool as UniswapPoolContract } from "../../generated/PendleRouter
 import { ONE_BD, UNISWAP_Q192, ZERO_BD } from "../utils/constants";
 import { TokenUtils } from "../entities/token";
 import { getGenericTokenPrice } from "./generic";
+import { pow10 } from "../utils/math";
 
 export function getPriceOfTokenInPool(
   tokenAddress: string,
@@ -12,11 +13,10 @@ export function getPriceOfTokenInPool(
 
   let token0 = new TokenUtils(contract.token0().toHexString());
   let token1 = new TokenUtils(contract.token1().toHexString());
-  let token0Decimals = token0.getDecimals().toBigDecimal();
-  let token1Decimals = token1.getDecimals().toBigDecimal();
+  let token0Decimals = pow10(token0.getDecimals());
+  let token1Decimals = pow10(token1.getDecimals());
 
-  let slot0 = contract.slot0();
-  let poolState = slot0.value0.toBigDecimal();
+  let poolState = contract.slot0().value0.toBigDecimal();
 
   let price0 = poolState
     .times(poolState)

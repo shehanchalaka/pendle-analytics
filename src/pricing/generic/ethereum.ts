@@ -38,5 +38,10 @@ function getPendlePrice(): BigDecimal {
 }
 
 function getBtrflyPrice(): BigDecimal {
-  return getPricefromUniswap(TOKEN_BTRFLY.toHexString(), POOL_WETH_X_BTRFLY);
+  let priceInEth = getPricefromUniswap(
+    TOKEN_BTRFLY.toHexString(),
+    POOL_WETH_X_BTRFLY
+  );
+  let ethPrice = getEthPrice();
+  return priceInEth.times(ethPrice);
 }
