@@ -6,8 +6,9 @@ export let PENDLE_WRAPPER: Address = Address.fromString(
 
 // generic pool addresses
 export let POOL_WAVAX_X_PENDLE = "0x3acD2FF1c3450bc8a9765AfD8d0DeA8E40822c86";
-export let POOL_USDC_WAVAX = "0xa389f9430876455c36478deea9769b7ca4e3ddb1";
-export let POOL_MIM_TIME = "0x113f413371fC4CC4C9d6416cf1DE9dFd7BF747Df";
+export let POOL_USDC_X_WAVAX = "0xa389f9430876455c36478deea9769b7ca4e3ddb1";
+export let POOL_MIM_X_TIME = "0x113f413371fC4CC4C9d6416cf1DE9dFd7BF747Df";
+export let POOL_JOE_X_WAVAX = "0x454E67025631C065d3cFAD6d71E6892f74487a15";
 
 // generic token addresses
 export let TOKEN_PENDLE = Address.fromString(
@@ -27,6 +28,9 @@ export let TOKEN_TIME = Address.fromString(
 );
 export let TOKEN_WMEMO = Address.fromString(
   "0x0da67235dd5787d67955420c84ca1cecd4e5bb3b"
+);
+export let TOKEN_JOE = Address.fromString(
+  "0x6e84a6216eA6dACC71eE8E6b0a5B7322EEbC0fDd"
 );
 
 // OT pool addresses

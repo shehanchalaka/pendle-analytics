@@ -4,9 +4,9 @@ import { WMEMO as WMEMOContract } from "../../../generated/templates/IPendleForg
 import { ERC20 } from "../../../generated/templates/IPendleForge/ERC20";
 import { Token } from "../../../generated/schema";
 import { loadToken } from "../../entities/token";
-import { ZERO_BD } from "../../utils/constants";
+import { ONE_BD, ZERO_BD } from "../../utils/constants";
 import { TOKEN_TIME, TOKEN_WMEMO } from "../../utils/constants/avalanche";
-import { pow10 } from "../../utils/math";
+import { exponentToBigDecimal, pow10 } from "../../utils/math";
 import { getGenericTokenPrice } from "../generic";
 
 export function getYieldBearingTokenPrice(token: Token): BigDecimal {
@@ -50,7 +50,7 @@ function getCTokenRate(token: Token, underlyingToken: Token): BigDecimal {
     .exchangeRateCurrent()
     .toBigDecimal()
     .div(COMPOUND_EXCHANGE_RATE_DECIMAL)
-    .div(pow10(underlyingToken.decimals.minus(token.decimals)));
+    .div(exponentToBigDecimal(underlyingToken.decimals.minus(token.decimals)));
 }
 
 function getxJOERate(token: Token, underlyingToken: Token): BigDecimal {

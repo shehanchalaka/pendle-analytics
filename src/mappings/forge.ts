@@ -53,6 +53,8 @@ export function handleNewYieldContracts(event: NewYieldContractsEvent): void {
   yt.type = "yt";
   yt.save();
 
+  yieldContract.block = event.block.number;
+  yieldContract.timestamp = event.block.timestamp;
   yieldContract.underlyingToken = underlyingToken.id;
   yieldContract.yieldBearingToken = yieldBearingToken.id;
   yieldContract.ot = ot.id;
@@ -95,8 +97,8 @@ export function handleMintYieldTokens(event: MintYieldTokensEvent): void {
   let otAmount = rawToDecimal(event.params.amountTokenMinted, ot.decimals);
 
   let inTokenAmount = getTokenAmount(hash, inToken, inAmount);
-  let otTokenAmount = getTokenAmount(hash, yt, ytAmount);
-  let ytTokenAmount = getTokenAmount(hash, ot, otAmount);
+  let ytTokenAmount = getTokenAmount(hash, yt, ytAmount);
+  let otTokenAmount = getTokenAmount(hash, ot, otAmount);
 
   let inputs = transaction.inputs;
   inputs.push(inTokenAmount.id);
@@ -145,14 +147,14 @@ export function handleRedeemYieldToken(event: RedeemYieldTokenEvent): void {
   let otAmount = rawToDecimal(event.params.amountToRedeem, ot.decimals);
   let outAmount = rawToDecimal(event.params.redeemedAmount, outToken.decimals);
 
-  let otTokenAmount = getTokenAmount(hash, yt, ytAmount);
-  let ytTokenAmount = getTokenAmount(hash, ot, otAmount);
+  let ytTokenAmount = getTokenAmount(hash, yt, ytAmount);
+  let otTokenAmount = getTokenAmount(hash, ot, otAmount);
   let outTokenAmount = getTokenAmount(hash, outToken, outAmount);
 
   let inputs = transaction.inputs;
   inputs.push(otTokenAmount.id);
   // YT cannot be redeemed after expiry
-  if (event.block.timestamp > expiry) {
+  if (event.block.timestamp < expiry) {
     inputs.push(ytTokenAmount.id);
   }
   transaction.inputs = inputs;

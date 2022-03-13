@@ -1,8 +1,17 @@
 import { PairCreated as PairCreatedEvent } from "../../generated/TraderJoeFactory/TraderJoeFactory";
-import { Market, Token } from "../../generated/schema";
-import { loadToken } from "../entities/token";
-import { ZERO_BI } from "../utils/constants";
-import { debug } from "../utils/debug";
+import {
+  Mint as MintEvent,
+  Burn as BurnEvent,
+  Swap as SwapEvent,
+} from "../../generated/templates/TraderJoePair/TraderJoePair";
+import { TraderJoePair as TraderJoePairTemplate } from "../../generated/templates";
+import { Market, Token, Transaction } from "../../generated/schema";
+import { getTokenAmount, loadToken } from "../entities/token";
+import { loadUser } from "../entities/user";
+import { ZERO_BD, ZERO_BI } from "../utils/constants";
+import { dataSource, DataSourceContext } from "@graphprotocol/graph-ts";
+import { rawToDecimal } from "../utils/math";
+import { getTokenPrice } from "../pricing";
 
 function isOT(id: string): boolean {
   let token = Token.load(id);
@@ -55,4 +64,180 @@ export function handleTraderJoePairCreated(event: PairCreatedEvent): void {
   market.swapCount = ZERO_BI;
 
   market.save();
+
+  const context = new DataSourceContext();
+  context.setString("market", event.params.pair.toHexString());
+  TraderJoePairTemplate.createWithContext(event.params.pair, context);
+}
+
+export function handleTraderJoeMint(event: MintEvent): void {
+  let hash = event.transaction.hash.toHexString();
+
+  let transaction = new Transaction(hash);
+  transaction.hash = event.transaction.hash.toHexString();
+  transaction.timestamp = event.block.timestamp;
+  transaction.block = event.block.number;
+  transaction.action = "join";
+
+  let user = loadUser(event.params.sender.toHexString());
+  transaction.user = user.id;
+
+  // market MUST exist at this point
+  let context = dataSource.context();
+  let market = Market.load(context.getString("market"))!;
+  transaction.market = market.id;
+
+  // NOTE no way to find the out LP token amount
+  let token0 = loadToken(market.token0);
+  let token1 = loadToken(market.token1);
+  let lpToken = loadToken(market.id);
+
+  let token0Amount = rawToDecimal(event.params.amount0, token0.decimals);
+  let token1Amount = rawToDecimal(event.params.amount1, token1.decimals);
+
+  let inToken0Amount = getTokenAmount(hash, token0, token0Amount);
+  let inToken1Amount = getTokenAmount(hash, token1, token1Amount);
+
+  let inputs = transaction.inputs;
+  inputs.push(inToken0Amount.id);
+  inputs.push(inToken1Amount.id);
+  transaction.inputs = inputs;
+
+  transaction.amountUSD = inToken0Amount.amountUSD.plus(
+    inToken1Amount.amountUSD
+  );
+
+  // derive lp token amount from transaction amountUSD
+  let lpPrice = getTokenPrice(lpToken);
+  if (lpPrice.gt(ZERO_BD)) {
+    let outLPAmount = inToken0Amount.amountUSD
+      .plus(inToken1Amount.amountUSD)
+      .div(lpPrice);
+    let outLPTokenAmount = getTokenAmount(hash, lpToken, outLPAmount);
+
+    let outputs = transaction.outputs;
+    outputs.push(outLPTokenAmount.id);
+    transaction.outputs = outputs;
+  }
+
+  transaction.save();
+}
+
+export function handleTraderJoeBurn(event: BurnEvent): void {
+  let hash = event.transaction.hash.toHexString();
+
+  let transaction = new Transaction(hash);
+  transaction.hash = event.transaction.hash.toHexString();
+  transaction.timestamp = event.block.timestamp;
+  transaction.block = event.block.number;
+  transaction.action = "exit";
+
+  let user = loadUser(event.params.sender.toHexString());
+  transaction.user = user.id;
+
+  // market MUST exist at this point
+  let context = dataSource.context();
+  let market = Market.load(context.getString("market"))!;
+  transaction.market = market.id;
+
+  // NOTE no way to find the in LP token amount
+  let lpToken = loadToken(market.id);
+  let token0 = loadToken(market.token0);
+  let token1 = loadToken(market.token1);
+
+  let token0Amount = rawToDecimal(event.params.amount0, token0.decimals);
+  let token1Amount = rawToDecimal(event.params.amount1, token1.decimals);
+
+  let outToken0Amount = getTokenAmount(hash, token0, token0Amount);
+  let outToken1Amount = getTokenAmount(hash, token1, token1Amount);
+
+  let outputs = transaction.outputs;
+  outputs.push(outToken0Amount.id);
+  outputs.push(outToken1Amount.id);
+  transaction.outputs = outputs;
+
+  transaction.amountUSD = outToken0Amount.amountUSD.plus(
+    outToken1Amount.amountUSD
+  );
+
+  // derive lp token amount from transaction amountUSD
+  let lpPrice = getTokenPrice(lpToken);
+  if (lpPrice.gt(ZERO_BD)) {
+    let inLPAmount = outToken0Amount.amountUSD
+      .plus(outToken1Amount.amountUSD)
+      .div(lpPrice);
+    let inLPTokenAmount = getTokenAmount(hash, lpToken, inLPAmount);
+
+    let inputs = transaction.inputs;
+    inputs.push(inLPTokenAmount.id);
+    transaction.inputs = inputs;
+  }
+
+  transaction.save();
+}
+
+export function handleTraderJoeSwap(event: SwapEvent): void {
+  let hash = event.transaction.hash.toHexString();
+
+  let transaction = new Transaction(hash);
+  transaction.hash = event.transaction.hash.toHexString();
+  transaction.timestamp = event.block.timestamp;
+  transaction.block = event.block.number;
+  transaction.action = "swap";
+
+  let user = loadUser(event.params.sender.toHexString());
+  transaction.user = user.id;
+
+  // market MUST exist at this point
+  let context = dataSource.context();
+  let market = Market.load(context.getString("market"))!;
+  transaction.market = market.id;
+
+  let token0 = loadToken(market.token0);
+  let token1 = loadToken(market.token1);
+
+  let inToken: Token;
+  let outToken: Token;
+
+  let inAmount = ZERO_BD;
+  let outAmount = ZERO_BD;
+
+  // NOTE: either amount0In or amount1In is > 0
+  if (event.params.amount0In.gt(ZERO_BI)) {
+    inToken = token0;
+    inAmount = rawToDecimal(event.params.amount0In, inToken.decimals);
+  } else {
+    inToken = token1;
+    inAmount = rawToDecimal(event.params.amount1In, inToken.decimals);
+  }
+
+  if (event.params.amount0Out.gt(ZERO_BI)) {
+    outToken = token0;
+    outAmount = rawToDecimal(event.params.amount0Out, outToken.decimals);
+  } else {
+    outToken = token1;
+    outAmount = rawToDecimal(event.params.amount1Out, outToken.decimals);
+  }
+
+  let inTokenAmount = getTokenAmount(hash, inToken, inAmount);
+  let outTokenAmount = getTokenAmount(hash, outToken, outAmount);
+
+  let inputs = transaction.inputs;
+  inputs.push(inTokenAmount.id);
+  transaction.inputs = inputs;
+
+  let outputs = transaction.outputs;
+  outputs.push(outTokenAmount.id);
+  transaction.outputs = outputs;
+
+  // find the price of quoteToken (ex: USDC, PENDLE)
+  let amountUSD = ZERO_BD;
+  if (inToken.type == "ot") {
+    amountUSD = getTokenPrice(outToken).times(outAmount);
+  } else {
+    amountUSD = getTokenPrice(inToken).times(inAmount);
+  }
+  transaction.amountUSD = amountUSD;
+
+  transaction.save();
 }

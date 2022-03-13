@@ -2,12 +2,11 @@ import { BigDecimal, BigInt, Address } from "@graphprotocol/graph-ts";
 import { ICToken as ICTokenContract } from "../../../generated/templates/IPendleForge/ICToken";
 import { IWXBTRFLY as IWXBTRFLYContract } from "../../../generated/templates/IPendleForge/IWXBTRFLY";
 import { Token } from "../../../generated/schema";
-import { ONE_BD, ZERO_BD } from "../../utils/constants";
+import { ZERO_BD } from "../../utils/constants";
 import { getGenericTokenPrice } from "../generic";
 import { pow10 } from "../../utils/math";
 import { loadToken } from "../../entities/token";
 import { TOKEN_BTRFLY, TOKEN_WXBTRFLY } from "../../utils/constants/ethereum";
-import { debug } from "../../utils/debug";
 
 export function getYieldBearingTokenPrice(token: Token): BigDecimal {
   // STEP 1: Find the underlying token price
@@ -34,12 +33,6 @@ export function getYieldBearingTokenPrice(token: Token): BigDecimal {
 
   if (token.forgeId.startsWith("Redacted")) {
     let rate = getBtrflyRate();
-    debug(
-      "BTRFLY price: " +
-        underlyingPrice.toString() +
-        ", index: " +
-        rate.toString()
-    );
     return underlyingPrice.div(rate);
   }
 

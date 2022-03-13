@@ -167,9 +167,9 @@ templates:
           file: ./abis/uniswap/pool.json
       eventHandlers:
         - event: Mint(indexed address,uint256,uint256)
-          handler: handleSushiswapMint
+          handler: handleTraderJoeMint
         - event: Burn(indexed address,uint256,uint256,indexed address)
-          handler: handleSushiswapBurn
+          handler: handleTraderJoeBurn
         - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
-          handler: handleSushiswapSwap
+          handler: handleTraderJoeSwap
       file: ./src/mappings/traderJoe.ts

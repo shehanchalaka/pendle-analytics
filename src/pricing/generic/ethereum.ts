@@ -10,6 +10,7 @@ import {
   TOKEN_USDC,
   TOKEN_WETH,
 } from "../../utils/constants/ethereum";
+import { debug } from "../../utils/debug";
 import { getPriceOfTokenInPool as getPricefromSushiswap } from "../sushiswap";
 import { getPriceOfTokenInPool as getPricefromUniswap } from "../uniswap";
 
@@ -25,6 +26,8 @@ export function getGenericTokenPrice(id: string): BigDecimal {
   if (tokenAddress == TOKEN_WETH) return getEthPrice();
 
   if (tokenAddress == TOKEN_BTRFLY) return getBtrflyPrice();
+
+  debug("Price not found: " + id);
 
   return ZERO_BD;
 }

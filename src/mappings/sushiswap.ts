@@ -1,9 +1,8 @@
 import { PairCreated as PairCreatedEvent } from "../../generated/SushiswapFactory/SushiswapFactory";
 import {
-  Swap as SwapEvent,
   Mint as MintEvent,
   Burn as BurnEvent,
-  Sync as SyncEvent,
+  Swap as SwapEvent,
 } from "../../generated/templates/SushiswapPair/SushiswapPair";
 import { SushiswapPair as SushiswapPairTemplate } from "../../generated/templates";
 import { Market, Token, Transaction } from "../../generated/schema";

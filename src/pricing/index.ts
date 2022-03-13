@@ -6,6 +6,7 @@ import { getLPOTPrice } from "./lp-ot";
 import { getLPYTPrice } from "./lp-yt";
 import { getYieldBearingTokenPrice } from "./yieldBearing";
 import { getGenericTokenPrice } from "./generic";
+import { ZERO_BD } from "../utils/constants";
 
 export function getTokenPrice(token: Token): BigDecimal {
   if (token.type == "ot") {
