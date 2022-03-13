@@ -18,6 +18,7 @@ type Forge @entity {
   id: ID!
   # human readable ID
   forgeId: String!
+  forgeAddress: String!
 }
 
 type YieldContract @entity {

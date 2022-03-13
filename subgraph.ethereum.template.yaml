@@ -1,5 +1,5 @@
 specVersion: 0.0.4
-description: Pendle Analytics Subgraph V2
+description: Pendle analytics subgraph on mainnet
 schema:
   file: ./schema.graphql
 dataSources:
@@ -90,8 +90,6 @@ dataSources:
           file: ./abis/sushiswap/factory.json
         - name: SushiswapPair
           file: ./abis/sushiswap/pair.json
-        - name: UniswapFactory
-          file: ./abis/uniswap/factory.json
         - name: UniswapPool
           file: ./abis/uniswap/pool.json
         - name: ERC20
@@ -133,8 +131,6 @@ templates:
           file: ./abis/sushiswap/factory.json
         - name: SushiswapPair
           file: ./abis/sushiswap/pair.json
-        - name: UniswapFactory
-          file: ./abis/uniswap/factory.json
         - name: UniswapPool
           file: ./abis/uniswap/pool.json
       eventHandlers:

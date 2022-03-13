@@ -110,14 +110,16 @@ export function handleSushiswapMint(event: MintEvent): void {
 
   // derive lp token amount from transaction amountUSD
   let lpPrice = getTokenPrice(lpToken);
-  let outLPAmount = inToken0Amount.amountUSD
-    .plus(inToken1Amount.amountUSD)
-    .div(lpPrice);
-  let outLPTokenAmount = getTokenAmount(hash, lpToken, outLPAmount);
+  if (lpPrice.gt(ZERO_BD)) {
+    let outLPAmount = inToken0Amount.amountUSD
+      .plus(inToken1Amount.amountUSD)
+      .div(lpPrice);
+    let outLPTokenAmount = getTokenAmount(hash, lpToken, outLPAmount);
 
-  let outputs = transaction.outputs;
-  outputs.push(outLPTokenAmount.id);
-  transaction.outputs = outputs;
+    let outputs = transaction.outputs;
+    outputs.push(outLPTokenAmount.id);
+    transaction.outputs = outputs;
+  }
 
   transaction.save();
 }
@@ -161,14 +163,16 @@ export function handleSushiswapBurn(event: BurnEvent): void {
 
   // derive lp token amount from transaction amountUSD
   let lpPrice = getTokenPrice(lpToken);
-  let inLPAmount = outToken0Amount.amountUSD
-    .plus(outToken1Amount.amountUSD)
-    .div(lpPrice);
-  let inLPTokenAmount = getTokenAmount(hash, lpToken, inLPAmount);
+  if (lpPrice.gt(ZERO_BD)) {
+    let inLPAmount = outToken0Amount.amountUSD
+      .plus(outToken1Amount.amountUSD)
+      .div(lpPrice);
+    let inLPTokenAmount = getTokenAmount(hash, lpToken, inLPAmount);
 
-  let inputs = transaction.inputs;
-  inputs.push(inLPTokenAmount.id);
-  transaction.inputs = inputs;
+    let inputs = transaction.inputs;
+    inputs.push(inLPTokenAmount.id);
+    transaction.inputs = inputs;
+  }
 
   transaction.save();
 }

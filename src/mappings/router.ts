@@ -17,6 +17,7 @@ import { ZERO_BD, ZERO_BI } from "../utils/constants";
 import { rawToDecimal } from "../utils/math";
 import { debug } from "../utils/debug";
 import { getTokenPrice } from "../pricing";
+import { PENDLE_WRAPPER } from "../utils/constants/ethereum";
 
 export function handleMarketCreated(event: MarketCreated): void {
   let market = new Market(event.params.market.toHexString());
@@ -47,6 +48,8 @@ export function handleMarketCreated(event: MarketCreated): void {
 }
 
 export function handleJoin(event: Join): void {
+  if (event.params.sender.equals(PENDLE_WRAPPER)) return;
+
   let hash = event.transaction.hash.toHexString();
 
   let transaction = new Transaction(hash);
@@ -93,6 +96,8 @@ export function handleJoin(event: Join): void {
 }
 
 export function handleExit(event: Exit): void {
+  if (event.params.sender.equals(PENDLE_WRAPPER)) return;
+
   let hash = event.transaction.hash.toHexString();
 
   let transaction = new Transaction(hash);
@@ -137,6 +142,8 @@ export function handleExit(event: Exit): void {
 }
 
 export function handleSwapEvent(event: SwapEvent): void {
+  if (event.params.trader.equals(PENDLE_WRAPPER)) return;
+
   let hash = event.transaction.hash.toHexString();
 
   let transaction = new Transaction(hash);

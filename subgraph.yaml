@@ -1,15 +1,15 @@
 specVersion: 0.0.4
-description: Pendle Analytics Subgraph V2
+description: Pendle analytics subgraph on avalnche
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: PendleRouter
-    network: mainnet
+    network: avalanche
     source:
-      address: "0x1b6d3E5Da9004668E14Ca39d1553E9a46Fe842B3"
+      address: "0x771ad65bF2837C89A1CC0A0FC601d9De7f217b52"
       abi: PendleRouter
-      startBlock: 12638048
+      startBlock: 6725078
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -25,14 +25,6 @@ dataSources:
           file: ./abis/PendleMarket.json
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: ICToken
-          file: ./abis/ICToken.json
-        - name: IWXBTRFLY
-          file: ./abis/IWXBTRFLY.json
-        - name: SushiswapFactory
-          file: ./abis/sushiswap/factory.json
-        - name: SushiswapPair
-          file: ./abis/sushiswap/pair.json
         - name: UniswapFactory
           file: ./abis/uniswap/factory.json
         - name: UniswapPool
@@ -49,11 +41,11 @@ dataSources:
       file: ./src/mappings/router.ts
   - kind: ethereum/contract
     name: PendleData
-    network: mainnet
+    network: avalanche
     source:
-      address: "0xE8A6916576832AA5504092C1cCCC46E3bB9491d6"
+      address: "0x94D7E5c48Ca9627001FACb04D1820C54dFf3032c"
       abi: PendleData
-      startBlock: 12638042
+      startBlock: 6725074
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -72,12 +64,12 @@ dataSources:
           handler: handleForgeAdded
       file: ./src/mappings/data.ts
   - kind: ethereum/contract
-    name: SushiswapFactory
-    network: mainnet
+    name: TraderJoeFactory
+    network: avalanche
     source:
-      address: "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac"
-      abi: SushiswapFactory
-      startBlock: 12638042
+      address: "0x9Ad6C38BE94206cA50bb0d90783181662f0Cfa10"
+      abi: TraderJoeFactory
+      startBlock: 6725074
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -86,29 +78,21 @@ dataSources:
         - Token
         - OTMarket
       abis:
-        - name: SushiswapFactory
-          file: ./abis/sushiswap/factory.json
-        - name: SushiswapPair
-          file: ./abis/sushiswap/pair.json
-        - name: UniswapFactory
-          file: ./abis/uniswap/factory.json
+        - name: TraderJoeFactory
+          file: ./abis/traderJoe/factory.json
         - name: UniswapPool
           file: ./abis/uniswap/pool.json
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: ICToken
-          file: ./abis/ICToken.json
-        - name: IWXBTRFLY
-          file: ./abis/IWXBTRFLY.json
       eventHandlers:
         - event: PairCreated(indexed address,indexed address,address,uint256)
-          handler: handleSushiswapPairCreated
-      file: ./src/mappings/sushiswap.ts
+          handler: handleTraderJoePairCreated
+      file: ./src/mappings/traderJoe.ts
 
 templates:
   - kind: ethereum/contract
     name: IPendleForge
-    network: mainnet
+    network: avalanche
     source:
       abi: IPendleForge
     mapping:
@@ -125,16 +109,8 @@ templates:
           file: ./abis/PendleMarket.json
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: ICToken
-          file: ./abis/ICToken.json
-        - name: IWXBTRFLY
-          file: ./abis/IWXBTRFLY.json
-        - name: SushiswapFactory
-          file: ./abis/sushiswap/factory.json
-        - name: SushiswapPair
-          file: ./abis/sushiswap/pair.json
-        - name: UniswapFactory
-          file: ./abis/uniswap/factory.json
+        - name: TraderJoePair
+          file: ./abis/traderJoe/pair.json
         - name: UniswapPool
           file: ./abis/uniswap/pool.json
       eventHandlers:
@@ -146,10 +122,10 @@ templates:
           handler: handleRedeemYieldToken
       file: ./src/mappings/forge.ts
   - kind: ethereum/contract
-    name: SushiswapPair
-    network: mainnet
+    name: TraderJoePair
+    network: avalanche
     source:
-      abi: SushiswapPair
+      abi: TraderJoePair
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -160,14 +136,10 @@ templates:
       abis:
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: ICToken
-          file: ./abis/ICToken.json
-        - name: IWXBTRFLY
-          file: ./abis/IWXBTRFLY.json
-        - name: SushiswapFactory
-          file: ./abis/sushiswap/factory.json
-        - name: SushiswapPair
-          file: ./abis/sushiswap/pair.json
+        - name: TraderJoeFactory
+          file: ./abis/traderJoe/factory.json
+        - name: TraderJoePair
+          file: ./abis/traderJoe/pair.json
         - name: UniswapFactory
           file: ./abis/uniswap/factory.json
         - name: UniswapPool
@@ -179,4 +151,4 @@ templates:
           handler: handleSushiswapBurn
         - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
           handler: handleSushiswapSwap
-      file: ./src/mappings/sushiswap.ts
+      file: ./src/mappings/traderJoe.ts
