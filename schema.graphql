@@ -14,15 +14,17 @@ type Token @entity {
 }
 
 type Forge @entity {
-  # forge address
   id: ID!
-  # human readable ID
+  block: BigInt!
+  timestamp: BigInt!
   forgeId: String!
-  forgeAddress: String!
 }
 
 type YieldContract @entity {
   id: ID!
+  block: BigInt!
+  timestamp: BigInt!
+
   forgeId: String!
   expiry: BigInt!
 
@@ -45,6 +47,8 @@ type YieldContract @entity {
 
 type Market @entity {
   id: ID!
+  block: BigInt!
+  timestamp: BigInt!
   type: String!
   token0: Token!
   token1: Token!
@@ -53,15 +57,13 @@ type Market @entity {
   expiry: BigInt!
   name: String!
   swapCount: BigInt!
-  createdTimestamp: BigInt!
-  createdBlock: BigInt!
 }
 
 type Transaction @entity {
   id: ID!
   hash: String!
-  timestamp: BigInt!
   block: BigInt!
+  timestamp: BigInt!
   market: Market
   yieldContract: YieldContract
   user: User!
@@ -82,13 +84,6 @@ type User @entity {
   id: ID!
 
   transactions: [Transaction!]! @derivedFrom(field: "user")
-}
-
-type TokenPrice @entity {
-  id: ID!
-  token: Token!
-  timestamp: BigInt!
-  price: BigDecimal!
 }
 
 type DebugLog @entity {

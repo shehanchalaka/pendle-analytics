@@ -16,7 +16,7 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Token
-        - PendleMarket
+        - Market
         - Transaction
       abis:
         - name: PendleRouter
@@ -33,8 +33,6 @@ dataSources:
           file: ./abis/sushiswap/factory.json
         - name: SushiswapPair
           file: ./abis/sushiswap/pair.json
-        - name: UniswapFactory
-          file: ./abis/uniswap/factory.json
         - name: UniswapPool
           file: ./abis/uniswap/pool.json
       eventHandlers:
@@ -152,7 +150,6 @@ templates:
       language: wasm/assemblyscript
       entities:
         - Token
-        - TokenPrice
       abis:
         - name: ERC20
           file: ./abis/ERC20.json

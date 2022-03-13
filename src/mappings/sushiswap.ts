@@ -42,6 +42,8 @@ export function handleSushiswapPairCreated(event: PairCreatedEvent): void {
   if (otAddress === "") return;
 
   let market = new Market(event.params.pair.toHexString());
+  market.block = event.block.number;
+  market.timestamp = event.block.timestamp;
 
   let lp = loadToken(event.params.pair.toHexString());
   lp.type = "lp-ot";
@@ -61,8 +63,6 @@ export function handleSushiswapPairCreated(event: PairCreatedEvent): void {
   market.expiry = ot.expiry;
   market.name = ot.symbol + " / " + quoteToken.symbol;
   market.swapCount = ZERO_BI;
-  market.createdTimestamp = event.block.timestamp;
-  market.createdBlock = event.block.number;
 
   market.save();
 

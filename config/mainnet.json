@@ -4,5 +4,6 @@
   "pendleRouterStartBlock": "12638048",
   "pendleData": "0xE8A6916576832AA5504092C1cCCC46E3bB9491d6",
   "pendleDataStartBlock": "12638042",
-  "sushiswapFactory": "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac"
+  "sushiswapFactory": "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac",
+  "pendleWrapper": "0x91b7c55301c6cc44ce01bce66dc0dfd176cf16bb"
 }

@@ -21,6 +21,8 @@ import { PENDLE_WRAPPER } from "../utils/constants/ethereum";
 
 export function handleMarketCreated(event: MarketCreated): void {
   let market = new Market(event.params.market.toHexString());
+  market.block = event.block.number;
+  market.timestamp = event.block.timestamp;
 
   let lp = loadToken(event.params.market.toHexString());
   lp.type = "lp-yt";
@@ -41,8 +43,6 @@ export function handleMarketCreated(event: MarketCreated): void {
   market.expiry = yt.expiry;
   market.name = yt.symbol + " / " + quoteToken.symbol;
   market.swapCount = ZERO_BI;
-  market.createdTimestamp = event.block.timestamp;
-  market.createdBlock = event.block.number;
 
   market.save();
 }

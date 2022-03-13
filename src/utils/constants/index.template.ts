@@ -15,4 +15,4 @@ export let UNISWAP_Q192 = BigInt.fromI32(2)
   .pow(192)
   .toBigDecimal();
 
-export let PENDLE_WRAPPER = Address.fromString("0x91b7c55301c6cc44ce01bce66dc0dfd176cf16bb");
+export let PENDLE_WRAPPER = Address.fromString("{{pendleWrapper}}");

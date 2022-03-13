@@ -16,7 +16,7 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Token
-        - PendleMarket
+        - Market
         - Transaction
       abis:
         - name: PendleRouter
@@ -25,8 +25,14 @@ dataSources:
           file: ./abis/PendleMarket.json
         - name: ERC20
           file: ./abis/ERC20.json
-        - name: UniswapFactory
-          file: ./abis/uniswap/factory.json
+        - name: ICToken
+          file: ./abis/ICToken.json
+        - name: WMEMO
+          file: ./abis/WMEMO.json
+        - name: TraderJoeFactory
+          file: ./abis/traderJoe/factory.json
+        - name: TraderJoePair
+          file: ./abis/traderJoe/pair.json
         - name: UniswapPool
           file: ./abis/uniswap/pool.json
       eventHandlers:
@@ -80,10 +86,16 @@ dataSources:
       abis:
         - name: TraderJoeFactory
           file: ./abis/traderJoe/factory.json
+        - name: TraderJoePair
+          file: ./abis/traderJoe/pair.json
         - name: UniswapPool
           file: ./abis/uniswap/pool.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: ICToken
+          file: ./abis/ICToken.json
+        - name: WMEMO
+          file: ./abis/WMEMO.json
       eventHandlers:
         - event: PairCreated(indexed address,indexed address,address,uint256)
           handler: handleTraderJoePairCreated
@@ -109,6 +121,12 @@ templates:
           file: ./abis/PendleMarket.json
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: ICToken
+          file: ./abis/ICToken.json
+        - name: WMEMO
+          file: ./abis/WMEMO.json
+        - name: TraderJoeFactory
+          file: ./abis/traderJoe/factory.json
         - name: TraderJoePair
           file: ./abis/traderJoe/pair.json
         - name: UniswapPool
@@ -132,10 +150,13 @@ templates:
       language: wasm/assemblyscript
       entities:
         - Token
-        - TokenPrice
       abis:
         - name: ERC20
           file: ./abis/ERC20.json
+        - name: ICToken
+          file: ./abis/ICToken.json
+        - name: WMEMO
+          file: ./abis/WMEMO.json
         - name: TraderJoeFactory
           file: ./abis/traderJoe/factory.json
         - name: TraderJoePair

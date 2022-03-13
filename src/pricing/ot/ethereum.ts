@@ -1,6 +1,6 @@
 import { BigDecimal } from "@graphprotocol/graph-ts";
 import { Token } from "../../../generated/schema";
-import { ONE_BD, ZERO_BD } from "../../utils/constants";
+import { ZERO_BD } from "../../utils/constants";
 import { getPriceOfTokenInPool } from "../sushiswap";
 
 export function getOTPrice(token: Token): BigDecimal {

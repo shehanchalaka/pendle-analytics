@@ -7,12 +7,27 @@ export let PENDLE_WRAPPER: Address = Address.fromString(
 // generic pool addresses
 export let POOL_WAVAX_X_PENDLE = "0x3acD2FF1c3450bc8a9765AfD8d0DeA8E40822c86";
 export let POOL_USDC_WAVAX = "0xa389f9430876455c36478deea9769b7ca4e3ddb1";
+export let POOL_MIM_TIME = "0x113f413371fC4CC4C9d6416cf1DE9dFd7BF747Df";
 
 // generic token addresses
-export let TOKEN_PENDLE = "0xfB98B335551a418cD0737375a2ea0ded62Ea213b";
-export let TOKEN_USDC = "0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664";
-export let TOKEN_MIM = "0x130966628846BFd36ff31a822705796e8cb8C18D";
-export let TOKEN_WAVAX = "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7";
+export let TOKEN_PENDLE = Address.fromString(
+  "0xfB98B335551a418cD0737375a2ea0ded62Ea213b"
+);
+export let TOKEN_USDC = Address.fromString(
+  "0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664"
+);
+export let TOKEN_MIM = Address.fromString(
+  "0x130966628846BFd36ff31a822705796e8cb8C18D"
+);
+export let TOKEN_WAVAX = Address.fromString(
+  "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7"
+);
+export let TOKEN_TIME = Address.fromString(
+  "0xb54f16fB19478766A268F172C9480f8da1a7c9C3"
+);
+export let TOKEN_WMEMO = Address.fromString(
+  "0x0da67235dd5787d67955420c84ca1cecd4e5bb3b"
+);
 
 // OT pool addresses
 export let POOL_OT_QIUSDC_28_DEC_2023_X_USDC =

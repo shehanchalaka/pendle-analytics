@@ -32,21 +32,27 @@ export function handleTraderJoePairCreated(event: PairCreatedEvent): void {
   if (otAddress === "") return;
 
   let market = new Market(event.params.pair.toHexString());
+  market.block = event.block.number;
+  market.timestamp = event.block.timestamp;
 
   let lp = loadToken(event.params.pair.toHexString());
   lp.type = "lp-ot";
   lp.save();
 
   let ot = loadToken(otAddress);
+  ot.market = market.id;
+  ot.save();
+
   let quoteToken = loadToken(quoteTokenAddress);
 
+  market.type = "ot";
+  market.token0 = token0;
+  market.token1 = token1;
   market.baseToken = ot.id;
   market.quoteToken = quoteToken.id;
   market.expiry = ot.expiry;
   market.name = ot.symbol + " / " + quoteToken.symbol;
   market.swapCount = ZERO_BI;
-  market.createdTimestamp = event.block.timestamp;
-  market.createdBlock = event.block.number;
 
   market.save();
 }

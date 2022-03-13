@@ -4,5 +4,6 @@
   "pendleRouterStartBlock": "6725078",
   "pendleData": "0x94D7E5c48Ca9627001FACb04D1820C54dFf3032c",
   "pendleDataStartBlock": "6725074",
-  "traderJoeFactory": "0x9Ad6C38BE94206cA50bb0d90783181662f0Cfa10"
+  "traderJoeFactory": "0x9Ad6C38BE94206cA50bb0d90783181662f0Cfa10",
+  "pendleWrapper": "0x91b7c55301c6cc44ce01bce66dc0dfd176cf16bb"
 }
