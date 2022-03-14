@@ -30,6 +30,7 @@ export function getTokenAmount(
   tokenAmount.amount = amount;
   let price = getTokenPrice(token);
   tokenAmount.amountUSD = amount.times(price);
+  tokenAmount.price = price;
   tokenAmount.save();
 
   return tokenAmount;

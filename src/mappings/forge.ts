@@ -1,4 +1,3 @@
-import { Address, Bytes, BigInt, BigDecimal } from "@graphprotocol/graph-ts";
 import {
   NewYieldContracts as NewYieldContractsEvent,
   MintYieldTokens as MintYieldTokensEvent,
@@ -117,17 +116,13 @@ export function handleMintYieldTokens(event: MintYieldTokensEvent): void {
   transaction.save();
 
   yieldContract.mintCount = yieldContract.mintCount.plus(ONE_BI);
-  yieldContract.mintedVolume = yieldContract.mintedVolume.plus(
-    inTokenAmount.amount
+  yieldContract.mintedVolume = yieldContract.mintedVolume.plus(inAmount);
+  yieldContract.lockedVolume = yieldContract.lockedVolume.plus(inAmount);
+  yieldContract.mintedVolumeUSD = yieldContract.mintedVolume.times(
+    inTokenAmount.price
   );
-  yieldContract.mintedVolumeUSD = yieldContract.mintedVolumeUSD.plus(
-    inTokenAmount.amountUSD
-  );
-  yieldContract.lockedVolume = yieldContract.lockedVolume.plus(
-    inTokenAmount.amount
-  );
-  yieldContract.lockedVolumeUSD = yieldContract.lockedVolumeUSD.plus(
-    inTokenAmount.amountUSD
+  yieldContract.lockedVolumeUSD = yieldContract.lockedVolume.plus(
+    inTokenAmount.price
   );
   yieldContract.save();
 }
@@ -186,17 +181,13 @@ export function handleRedeemYieldToken(event: RedeemYieldTokenEvent): void {
   transaction.save();
 
   yieldContract.redeemCount = yieldContract.redeemCount.plus(ONE_BI);
-  yieldContract.redeemedVolume = yieldContract.redeemedVolume.plus(
-    outTokenAmount.amount
+  yieldContract.redeemedVolume = yieldContract.redeemedVolume.plus(outAmount);
+  yieldContract.lockedVolume = yieldContract.lockedVolume.minus(outAmount);
+  yieldContract.redeemedVolumeUSD = yieldContract.redeemedVolume.plus(
+    outTokenAmount.price
   );
-  yieldContract.redeemedVolumeUSD = yieldContract.redeemedVolumeUSD.plus(
-    outTokenAmount.amountUSD
-  );
-  yieldContract.lockedVolume = yieldContract.lockedVolume.minus(
-    outTokenAmount.amount
-  );
-  yieldContract.lockedVolumeUSD = yieldContract.lockedVolumeUSD.minus(
-    outTokenAmount.amountUSD
+  yieldContract.lockedVolumeUSD = yieldContract.lockedVolume.minus(
+    outTokenAmount.price
   );
   yieldContract.save();
 }

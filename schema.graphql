@@ -54,6 +54,7 @@ type Market @entity {
   token1: Token!
   baseToken: Token!
   quoteToken: Token!
+  startTime: BigInt!
   expiry: BigInt!
   name: String!
   swapCount: BigInt!
@@ -92,6 +93,7 @@ type TokenAmount @entity {
   token: Token!
   amount: BigDecimal!
   amountUSD: BigDecimal!
+  price: BigDecimal!
 }
 
 type DebugLog @entity {

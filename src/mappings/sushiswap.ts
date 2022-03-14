@@ -73,7 +73,7 @@ export function handleSushiswapPairCreated(event: PairCreatedEvent): void {
 export function handleSushiswapMint(event: MintEvent): void {
   let hash = event.transaction.hash.toHexString();
 
-  let transaction = new Transaction(hash);
+  let transaction = new Transaction(hash + "-join");
   transaction.hash = event.transaction.hash.toHexString();
   transaction.timestamp = event.block.timestamp;
   transaction.block = event.block.number;
@@ -126,7 +126,7 @@ export function handleSushiswapMint(event: MintEvent): void {
 export function handleSushiswapBurn(event: BurnEvent): void {
   let hash = event.transaction.hash.toHexString();
 
-  let transaction = new Transaction(hash);
+  let transaction = new Transaction(hash + "-exit");
   transaction.hash = event.transaction.hash.toHexString();
   transaction.timestamp = event.block.timestamp;
   transaction.block = event.block.number;
@@ -179,7 +179,7 @@ export function handleSushiswapBurn(event: BurnEvent): void {
 export function handleSushiswapSwap(event: SwapEvent): void {
   let hash = event.transaction.hash.toHexString();
 
-  let transaction = new Transaction(hash);
+  let transaction = new Transaction(hash + "-swap");
   transaction.hash = event.transaction.hash.toHexString();
   transaction.timestamp = event.block.timestamp;
   transaction.block = event.block.number;

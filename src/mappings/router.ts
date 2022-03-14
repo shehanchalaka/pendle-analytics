@@ -1,10 +1,4 @@
 import {
-  BigDecimal,
-  BigInt,
-  dataSource,
-  TypedMap,
-} from "@graphprotocol/graph-ts";
-import {
   Exit,
   Join,
   MarketCreated,
@@ -13,11 +7,10 @@ import {
 import { Market, Transaction } from "../../generated/schema";
 import { loadToken, getTokenAmount } from "../entities/token";
 import { loadUser } from "../entities/user";
-import { ZERO_BD, ZERO_BI } from "../utils/constants";
+import { ZERO_BI } from "../utils/constants";
 import { rawToDecimal } from "../utils/math";
-import { debug } from "../utils/debug";
-import { getTokenPrice } from "../pricing";
 import { PENDLE_WRAPPER } from "../utils/constants/ethereum";
+import { getMarketStartTime } from "../entities/pendleMarket";
 
 export function handleMarketCreated(event: MarketCreated): void {
   let market = new Market(event.params.market.toHexString());
@@ -40,6 +33,7 @@ export function handleMarketCreated(event: MarketCreated): void {
   market.token1 = quoteToken.id;
   market.baseToken = yt.id;
   market.quoteToken = quoteToken.id;
+  market.startTime = getMarketStartTime(event.params.market.toHexString());
   market.expiry = yt.expiry;
   market.name = yt.symbol + " / " + quoteToken.symbol;
   market.swapCount = ZERO_BI;
