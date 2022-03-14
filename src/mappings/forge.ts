@@ -10,6 +10,7 @@ import { rawToDecimal } from "../utils/math";
 import { loadYieldContract } from "../entities/yieldContract";
 import { loadUser } from "../entities/user";
 import { isLP } from "../helpers";
+import { ONE_BI } from "../utils/constants";
 
 export function handleNewYieldContracts(event: NewYieldContractsEvent): void {
   let forgeId = event.params.forgeId.toString();
@@ -45,12 +46,14 @@ export function handleNewYieldContracts(event: NewYieldContractsEvent): void {
   ot.forgeId = forgeId;
   ot.expiry = expiry;
   ot.type = "ot";
+  ot.underlyingToken = underlyingToken.id;
   ot.save();
 
   let yt = loadToken(ytAddress);
   yt.forgeId = forgeId;
   yt.expiry = expiry;
   yt.type = "yt";
+  yt.underlyingToken = underlyingToken.id;
   yt.save();
 
   yieldContract.block = event.block.number;
@@ -66,7 +69,7 @@ export function handleNewYieldContracts(event: NewYieldContractsEvent): void {
 export function handleMintYieldTokens(event: MintYieldTokensEvent): void {
   let hash = event.transaction.hash.toHexString();
 
-  let transaction = new Transaction(hash);
+  let transaction = new Transaction(hash + "-mint");
   transaction.hash = event.transaction.hash.toHexString();
   transaction.timestamp = event.block.timestamp;
   transaction.block = event.block.number;
@@ -112,12 +115,27 @@ export function handleMintYieldTokens(event: MintYieldTokensEvent): void {
   transaction.amountUSD = inTokenAmount.amountUSD;
 
   transaction.save();
+
+  yieldContract.mintCount = yieldContract.mintCount.plus(ONE_BI);
+  yieldContract.mintedVolume = yieldContract.mintedVolume.plus(
+    inTokenAmount.amount
+  );
+  yieldContract.mintedVolumeUSD = yieldContract.mintedVolumeUSD.plus(
+    inTokenAmount.amountUSD
+  );
+  yieldContract.lockedVolume = yieldContract.lockedVolume.plus(
+    inTokenAmount.amount
+  );
+  yieldContract.lockedVolumeUSD = yieldContract.lockedVolumeUSD.plus(
+    inTokenAmount.amountUSD
+  );
+  yieldContract.save();
 }
 
 export function handleRedeemYieldToken(event: RedeemYieldTokenEvent): void {
   let hash = event.transaction.hash.toHexString();
 
-  let transaction = new Transaction(hash);
+  let transaction = new Transaction(hash + "-redeem");
   transaction.hash = event.transaction.hash.toHexString();
   transaction.timestamp = event.block.timestamp;
   transaction.block = event.block.number;
@@ -166,4 +184,19 @@ export function handleRedeemYieldToken(event: RedeemYieldTokenEvent): void {
   transaction.amountUSD = otTokenAmount.amountUSD.plus(ytTokenAmount.amountUSD);
 
   transaction.save();
+
+  yieldContract.redeemCount = yieldContract.redeemCount.plus(ONE_BI);
+  yieldContract.redeemedVolume = yieldContract.redeemedVolume.plus(
+    outTokenAmount.amount
+  );
+  yieldContract.redeemedVolumeUSD = yieldContract.redeemedVolumeUSD.plus(
+    outTokenAmount.amountUSD
+  );
+  yieldContract.lockedVolume = yieldContract.lockedVolume.minus(
+    outTokenAmount.amount
+  );
+  yieldContract.lockedVolumeUSD = yieldContract.lockedVolumeUSD.minus(
+    outTokenAmount.amountUSD
+  );
+  yieldContract.save();
 }

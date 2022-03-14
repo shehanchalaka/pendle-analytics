@@ -14,9 +14,9 @@ export function loadYieldContract(
     yieldContract.forgeId = forgeId;
     yieldContract.expiry = expiry;
     yieldContract.underlyingToken = underlyingTokenAddress;
-    yieldContract.tokenizedVolume = ZERO_BD;
-    yieldContract.tokenizedVolumeUSD = ZERO_BD;
-    yieldContract.tokenizeCount = ZERO_BI;
+    yieldContract.mintedVolume = ZERO_BD;
+    yieldContract.mintedVolumeUSD = ZERO_BD;
+    yieldContract.mintCount = ZERO_BI;
     yieldContract.redeemedVolume = ZERO_BD;
     yieldContract.redeemedVolumeUSD = ZERO_BD;
     yieldContract.redeemCount = ZERO_BI;

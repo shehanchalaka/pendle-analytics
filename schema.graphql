@@ -33,9 +33,9 @@ type YieldContract @entity {
   ot: Token!
   yt: Token!
 
-  tokenizedVolume: BigDecimal!
-  tokenizedVolumeUSD: BigDecimal!
-  tokenizeCount: BigInt!
+  mintedVolume: BigDecimal!
+  mintedVolumeUSD: BigDecimal!
+  mintCount: BigInt!
 
   redeemedVolume: BigDecimal!
   redeemedVolumeUSD: BigDecimal!
@@ -73,17 +73,25 @@ type Transaction @entity {
   amountUSD: BigDecimal!
 }
 
+type User @entity {
+  id: ID!
+
+  transactions: [Transaction!]! @derivedFrom(field: "user")
+}
+
+type MarketData @entity {
+  id: ID!
+  block: BigInt!
+  timestamp: BigInt!
+  market: Market
+  impliedYield: BigDecimal!
+}
+
 type TokenAmount @entity {
   id: ID!
   token: Token!
   amount: BigDecimal!
   amountUSD: BigDecimal!
-}
-
-type User @entity {
-  id: ID!
-
-  transactions: [Transaction!]! @derivedFrom(field: "user")
 }
 
 type DebugLog @entity {

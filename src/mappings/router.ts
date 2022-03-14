@@ -52,7 +52,7 @@ export function handleJoin(event: Join): void {
 
   let hash = event.transaction.hash.toHexString();
 
-  let transaction = new Transaction(hash);
+  let transaction = new Transaction(hash + "-join");
   transaction.hash = event.transaction.hash.toHexString();
   transaction.timestamp = event.block.timestamp;
   transaction.block = event.block.number;
@@ -100,7 +100,7 @@ export function handleExit(event: Exit): void {
 
   let hash = event.transaction.hash.toHexString();
 
-  let transaction = new Transaction(hash);
+  let transaction = new Transaction(hash + "-exit");
   transaction.hash = event.transaction.hash.toHexString();
   transaction.timestamp = event.block.timestamp;
   transaction.block = event.block.number;
@@ -146,7 +146,7 @@ export function handleSwapEvent(event: SwapEvent): void {
 
   let hash = event.transaction.hash.toHexString();
 
-  let transaction = new Transaction(hash);
+  let transaction = new Transaction(hash + "-swap");
   transaction.hash = event.transaction.hash.toHexString();
   transaction.timestamp = event.block.timestamp;
   transaction.block = event.block.number;

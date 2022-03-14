@@ -16,8 +16,11 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Token
+        - Forge
+        - YieldContract
         - Market
         - Transaction
+        - User
       abis:
         - name: PendleRouter
           file: ./abis/PendleRouter.json
@@ -82,7 +85,8 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Token
-        - OTMarket
+        - Market
+        - Transaction
       abis:
         - name: TraderJoeFactory
           file: ./abis/traderJoe/factory.json
@@ -150,6 +154,8 @@ templates:
       language: wasm/assemblyscript
       entities:
         - Token
+        - Market
+        - Transaction
       abis:
         - name: ERC20
           file: ./abis/ERC20.json

@@ -230,14 +230,7 @@ export function handleSushiswapSwap(event: SwapEvent): void {
   outputs.push(outTokenAmount.id);
   transaction.outputs = outputs;
 
-  // find the price of quoteToken (ex: USDC, PENDLE)
-  let amountUSD = ZERO_BD;
-  if (inToken.type == "ot") {
-    amountUSD = getTokenPrice(outToken).times(outAmount);
-  } else {
-    amountUSD = getTokenPrice(inToken).times(inAmount);
-  }
-  transaction.amountUSD = amountUSD;
+  transaction.amountUSD = inTokenAmount.amountUSD;
 
   transaction.save();
 }
