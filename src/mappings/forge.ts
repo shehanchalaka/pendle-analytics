@@ -121,7 +121,7 @@ export function handleMintYieldTokens(event: MintYieldTokensEvent): void {
   yieldContract.mintedVolumeUSD = yieldContract.mintedVolume.times(
     inTokenAmount.price
   );
-  yieldContract.lockedVolumeUSD = yieldContract.lockedVolume.plus(
+  yieldContract.lockedVolumeUSD = yieldContract.lockedVolume.times(
     inTokenAmount.price
   );
   yieldContract.save();
@@ -183,10 +183,10 @@ export function handleRedeemYieldToken(event: RedeemYieldTokenEvent): void {
   yieldContract.redeemCount = yieldContract.redeemCount.plus(ONE_BI);
   yieldContract.redeemedVolume = yieldContract.redeemedVolume.plus(outAmount);
   yieldContract.lockedVolume = yieldContract.lockedVolume.minus(outAmount);
-  yieldContract.redeemedVolumeUSD = yieldContract.redeemedVolume.plus(
+  yieldContract.redeemedVolumeUSD = yieldContract.redeemedVolume.times(
     outTokenAmount.price
   );
-  yieldContract.lockedVolumeUSD = yieldContract.lockedVolume.minus(
+  yieldContract.lockedVolumeUSD = yieldContract.lockedVolume.times(
     outTokenAmount.price
   );
   yieldContract.save();
